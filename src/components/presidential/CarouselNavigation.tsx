@@ -43,9 +43,9 @@ export const CarouselNavigation: React.FC<CarouselNavigationProps> = ({
           {tabs.map((tab, index) => (
             <button
               key={index}
-              className={`text-[#2C2233] ${
+              className={`text-[#2C2233] border-r border-r-[color:var(--UI-Colors-Muted-Lilac,#D6CEE4)] border-solid ${
                 index === activeTabIndex
-                  ? "text-sm leading-none tracking-[0.1px] self-stretch border-r-[color:var(--UI-Colors-Muted-Lilac,#D6CEE4)] min-h-11 font-semibold my-auto px-4 border-r border-solid"
+                  ? "text-sm leading-none tracking-[0.1px] self-stretch min-h-11 font-semibold my-auto px-4"
                   : "text-xs leading-[16px)] px-4"
               }`}
               onClick={() => onTabChange(index)}
