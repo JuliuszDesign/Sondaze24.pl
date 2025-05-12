@@ -1,5 +1,5 @@
+
 import React, { useState } from "react";
-import { Header } from "./Header";
 import { ViewToggle } from "./ViewToggle";
 import { PollCarousel } from "./PollCarousel";
 import { ViewType } from "./types";
@@ -15,8 +15,7 @@ const HomePresidentialView: React.FC = () => {
   const polls = currentView === "presidential" ? presidentialPolls : partyPolls;
 
   return (
-    <div className="max-w-[480px] w-full bg-white mx-auto">
-      <Header siteName="Sondaze24.pl" />
+    <div className="w-full bg-white">
       <ViewToggle onViewChange={handleViewChange} />
       <PollCarousel polls={polls} />
     </div>

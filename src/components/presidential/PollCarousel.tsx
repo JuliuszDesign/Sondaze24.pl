@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+
+import React, { useState, useRef, useEffect } from "react";
 import { PollGraph } from "./PollGraph";
 import { CarouselNavigation } from "./CarouselNavigation";
 import { PollData } from "./types";
@@ -26,17 +27,38 @@ export const PollCarousel: React.FC<PollCarouselProps> = ({ polls }) => {
     }
   };
 
+  // Handle scroll events to update active tab
+  const handleScroll = () => {
+    if (carouselRef.current) {
+      const scrollPosition = carouselRef.current.scrollLeft;
+      const itemWidth = carouselRef.current.offsetWidth;
+      const newIndex = Math.round(scrollPosition / itemWidth);
+      
+      if (newIndex !== activeTabIndex) {
+        setActiveTabIndex(newIndex);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (carousel) {
+      carousel.addEventListener("scroll", handleScroll);
+      return () => carousel.removeEventListener("scroll", handleScroll);
+    }
+  }, [activeTabIndex]);
+
   return (
-    <div className="justify-center items-stretch border border-[color:var(--UI-Colors-Muted-Lilac,#D6CEE4)] flex w-full flex-col border-solid">
+    <div className="flex flex-col w-full">
       <div
         ref={carouselRef}
-        className="flex w-full items-center gap-3 overflow-x-auto scrollbar-hide"
-        style={{ scrollSnapType: "x mandatory", scrollBehavior: "smooth" }}
+        className="flex w-full overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+        style={{ scrollBehavior: "smooth" }}
       >
         {polls.map((poll, index) => (
           <div
             key={index}
-            style={{ scrollSnapAlign: "start", flexShrink: 0 }}
+            className="w-full flex-shrink-0 snap-center"
           >
             <PollGraph poll={poll} />
           </div>

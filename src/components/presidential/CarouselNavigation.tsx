@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useRef, useEffect } from "react";
 
 interface CarouselNavigationProps {
   tabs: string[];
@@ -11,10 +12,34 @@ export const CarouselNavigation: React.FC<CarouselNavigationProps> = ({
   activeTabIndex,
   onTabChange,
 }) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Center the active tab on change
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const activeTab = container.children[activeTabIndex] as HTMLElement;
+      
+      if (activeTab) {
+        const containerWidth = container.offsetWidth;
+        const tabWidth = activeTab.offsetWidth;
+        const scrollLeft = activeTab.offsetLeft - containerWidth / 2 + tabWidth / 2;
+        
+        container.scrollTo({
+          left: scrollLeft,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [activeTabIndex]);
+
   return (
     <div className="border border-[color:var(--UI-Colors-Muted-Lilac,#D6CEE4)] min-h-24 w-full bg-[#F7F4FA] py-3 border-solid">
       <div className="flex w-full flex-col text-xs text-[#2C2233] font-medium text-center tracking-[0.5px] leading-none">
-        <div className="items-center flex min-h-11 bg-[#F7F4FA] overflow-x-auto">
+        <div 
+          ref={scrollContainerRef}
+          className="items-center flex min-h-11 bg-[#F7F4FA] overflow-x-auto whitespace-nowrap scrollbar-hide"
+        >
           {tabs.map((tab, index) => (
             <button
               key={index}
@@ -31,7 +56,7 @@ export const CarouselNavigation: React.FC<CarouselNavigationProps> = ({
         </div>
       </div>
       <div className="flex w-full items-center gap-2.5 justify-center mt-3">
-        <div className="self-stretch flex w-[132px] items-center gap-2 justify-center my-auto">
+        <div className="self-stretch flex items-center gap-2 justify-center my-auto">
           {tabs.map((_, index) => (
             <div
               key={index}
