@@ -1,5 +1,4 @@
-
-import { PollData } from "./types";
+import { PollData, SeatDistribution } from "./types";
 
 export const presidentialPolls: PollData[] = [
   {
@@ -98,3 +97,16 @@ export const partyPolls: PollData[] = [
     ],
   },
 ];
+
+export const seatDistributionData: SeatDistribution = {
+  totalSeats: 460,
+  rulingCoalitionTotal: 230,
+  oppositionTotal: 230,
+  parties: [
+    { name: "KO", seats: 160, color: "#F97316", coalition: "ruling" },
+    { name: "PiS", seats: 146, color: "#0FA0CE", coalition: "opposition" },
+    { name: "Konfederacja", seats: 84, color: "#221F26", coalition: "opposition" },
+    { name: "TD", seats: 40, color: "#8BBB39", coalition: "ruling" },
+    { name: "Lewica", seats: 30, color: "#ea384c", coalition: "ruling" },
+  ]
+};

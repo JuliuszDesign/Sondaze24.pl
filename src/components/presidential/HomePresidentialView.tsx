@@ -4,7 +4,8 @@ import { Header } from "./Header";
 import { ViewToggle } from "./ViewToggle";
 import { PollCarousel } from "./PollCarousel";
 import { ViewType } from "./types";
-import { presidentialPolls, partyPolls } from "./mockData";
+import { presidentialPolls, partyPolls, seatDistributionData } from "./mockData";
+import { SeatDistributionGraph } from "./SeatDistributionGraph";
 
 const HomePresidentialView: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewType>("presidential");
@@ -20,6 +21,13 @@ const HomePresidentialView: React.FC = () => {
       <Header siteName="Sondaze24.pl" />
       <ViewToggle onViewChange={handleViewChange} />
       <PollCarousel polls={polls} />
+      
+      {/* Only show seat distribution for party view */}
+      {currentView === "party" && (
+        <div className="px-4 py-6 bg-[#EEEAF3]">
+          <SeatDistributionGraph data={seatDistributionData} />
+        </div>
+      )}
     </div>
   );
 };
