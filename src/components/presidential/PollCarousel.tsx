@@ -50,6 +50,11 @@ export const PollCarousel: React.FC<PollCarouselProps> = ({ polls }) => {
 
   return (
     <div className="flex flex-col w-full">
+      <CarouselNavigation
+        tabs={polls.map((poll) => poll.title)}
+        activeTabIndex={activeTabIndex}
+        onTabChange={handleTabChange}
+      />
       <div
         ref={carouselRef}
         className="flex w-full overflow-x-auto scrollbar-hide snap-x snap-mandatory"
@@ -64,11 +69,6 @@ export const PollCarousel: React.FC<PollCarouselProps> = ({ polls }) => {
           </div>
         ))}
       </div>
-      <CarouselNavigation
-        tabs={polls.map((poll) => poll.title)}
-        activeTabIndex={activeTabIndex}
-        onTabChange={handleTabChange}
-      />
     </div>
   );
 };
