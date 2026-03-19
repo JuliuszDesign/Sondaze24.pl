@@ -18,16 +18,18 @@ const HomePresidentialView: React.FC = () => {
 
   return (
     <div className="w-full bg-white">
-      <Header siteName="Sondaze24.pl" />
-      <ViewToggle onViewChange={handleViewChange} />
-      <PollCarousel polls={polls} />
-      
-      {/* Only show seat distribution for party view */}
-      {currentView === "party" && (
-        <div className="px-4 py-6 bg-[#EEEAF3]">
-          <SeatDistributionGraph data={seatDistributionData} />
-        </div>
-      )}
+      <div className="w-full max-w-[1140px] mx-auto">
+        <Header siteName="Sondaze24.pl" />
+        <ViewToggle onViewChange={handleViewChange} />
+        <PollCarousel polls={polls} />
+        
+        {/* Only show seat distribution for party view */}
+        {currentView === "party" && (
+          <div className="px-4 py-6 bg-[#EEEAF3]">
+            <SeatDistributionGraph data={seatDistributionData} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
