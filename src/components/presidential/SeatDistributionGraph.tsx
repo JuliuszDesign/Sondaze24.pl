@@ -51,18 +51,39 @@ export const SeatDistributionGraph: React.FC<SeatDistributionGraphProps> = ({ da
 
   const seats = useMemo(() => generateHemicycleSeats(data.totalSeats, 15), [data.totalSeats]);
 
-  // Build color array: assign seats to parties in order
+  // Build angular boundaries for pie-like wedges
   const seatColors = useMemo(() => {
-    const colors: string[] = [];
-    // Sort parties: ruling first (left side), then opposition (right side)
     const orderedParties = [...sortedRulingParties, ...sortedOppositionParties];
+    // Calculate angular boundaries (each party gets a proportional wedge)
+    const boundaries: { minAngle: number; maxAngle: number; color: string }[] = [];
+    let cumulative = 0;
+    const padding = 0.04;
+    const totalAngle = Math.PI - 2 * padding;
     for (const party of orderedParties) {
-      for (let i = 0; i < party.seats; i++) {
-        colors.push(party.color);
-      }
+      const fraction = party.seats / data.totalSeats;
+      const startAngle = padding + cumulative * totalAngle;
+      cumulative += fraction;
+      const endAngle = padding + cumulative * totalAngle;
+      boundaries.push({ minAngle: startAngle, maxAngle: endAngle, color: party.color });
     }
-    return colors;
-  }, [data.parties]);
+
+    // Assign color to each seat based on its angle in the semicircle
+    return seats.map((seat) => {
+      // Recover angle: seats go from PI to 0 (left to right)
+      const angle = Math.PI - Math.atan2(
+        (1.0 - seat.y) / 0.95,
+        (seat.x - 0.5) * 2
+      );
+      // angle is now 0..PI measured from right, matching our boundary convention
+      const normalizedAngle = Math.max(padding, Math.min(Math.PI - padding, angle));
+      for (const b of boundaries) {
+        if (normalizedAngle >= b.minAngle - 0.001 && normalizedAngle <= b.maxAngle + 0.001) {
+          return b.color;
+        }
+      }
+      return "#D1D5DB";
+    });
+  }, [data.parties, seats]);
 
   const dotRadius = 3.2;
   const viewBoxWidth = 500;
